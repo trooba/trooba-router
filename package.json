@@ -1,0 +1,33 @@
+{
+  "name": "trooba-router",
+  "version": "0.1.0",
+  "description": "Generic router for Trooba framework",
+  "main": "index.js",
+  "scripts": {
+    "bench": "node bench.js",
+    "test": "tap test/*.test.js --reporter classic",
+    "coverage": "tap test/*.test.js --cov --coverage-report=text-lcov | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dimichgh/trooba-router.git"
+  },
+  "keywords": [
+    "router",
+    "trooba",
+    "server",
+    "http",
+    "grpc",
+    "websocket"
+  ],
+  "author": "Dmytro Semenov <dimichsdg@yahoo.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dimichgh/trooba-router/issues"
+  },
+  "homepage": "https://github.com/dimichgh/trooba-router#readme",
+  "devDependencies": {
+    "tap": "^10.7.1",
+    "trooba": "^2.0.2"
+  }
+}
