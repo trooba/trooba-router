@@ -2,12 +2,10 @@
 
 const t = require('tap');
 const Trooba = require('trooba');
-const createRouter = require('..');
+const router = require('..');
 
 t.test('basic router with trooba config', t => {
     t.plan(8);
-
-    const router = createRouter();
 
     const pipe = Trooba
     .use(router, {
@@ -62,8 +60,6 @@ t.test('basic router with trooba config', t => {
 t.test('basic router with trooba config and handlers as modules', t => {
     t.plan(6);
 
-    const router = createRouter();
-
     const pipe = Trooba
     .use(router, {
         'GET /test': require.resolve('./fixtures/router/get'),
@@ -91,5 +87,28 @@ t.test('basic router with trooba config and handlers as modules', t => {
         t.deepEqual(JSON.parse(response.body), {
             hello: '123'
         });
+    });
+});
+
+t.test('router should share storage', t => {
+    t.plan(1);
+
+    const store = {};
+
+    router({
+        store: store,
+        context: {}
+    }, {
+        'GET /test': pipe => {
+            t.ok(pipe.context.route.params);
+        }
+    });
+
+    router({
+        store: store,
+        context: {
+            operation: 'GET',
+            path: '/test'
+        }
     });
 });

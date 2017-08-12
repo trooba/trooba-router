@@ -1,7 +1,7 @@
 'use strict';
 
 const t = require('tap');
-const createRouter = require('..');
+const createRouter = require('../lib/router');
 
 t.test('pretty print - static routes', t => {
     t.plan(2);

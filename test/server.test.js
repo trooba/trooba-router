@@ -5,25 +5,25 @@ const Http = require('http');
 const t = require('tap');
 const Trooba = require('trooba');
 const request = require('request');
-const createRouter = require('..');
+const router = require('..');
 
 t.test('basic router with http server', t => {
     t.plan(5);
 
-    const router = createRouter();
-    router.use('GET /test', pipe => {
-        t.ok(pipe.context.route.params);
-        pipe.on('request', request => {
-            pipe.respond({
-                status: 200,
-                body: JSON.stringify({
-                    hello: 'world'
-                })
+    const app = createApp(router, {
+        'GET /test': pipe => {
+            t.ok(pipe.context.route.params);
+            pipe.on('request', request => {
+                pipe.respond({
+                    status: 200,
+                    body: JSON.stringify({
+                        hello: 'world'
+                    })
+                });
             });
-        });
+        }
     });
 
-    const app = createApp(router);
     const server = app.listen((err) => {
         t.error(err);
         server.unref();
@@ -43,18 +43,18 @@ t.test('basic router with http server', t => {
 
 t.test('router with params with http server', t => {
     t.plan(5);
-    const router = createRouter();
-    router.use('GET /test/:id', pipe => {
-        t.is(pipe.context.route.params.id, 'hello');
-        pipe.respond({
-            status: 200,
-            body: JSON.stringify({
-                hello: 'world'
-            })
-        });
-    });
 
-    const app = createApp(router);
+    const app = createApp(router, {
+        'GET /test/:id': pipe => {
+            t.is(pipe.context.route.params.id, 'hello');
+            pipe.respond({
+                status: 200,
+                body: JSON.stringify({
+                    hello: 'world'
+                })
+            });
+        }
+    });
     const server = app.listen((err) => {
         t.error(err);
         server.unref();
@@ -74,7 +74,8 @@ t.test('router with params with http server', t => {
 
 t.test('default route', t => {
     t.plan(3);
-    const router = createRouter({
+
+    const app = createApp(router, {
         defaultRoute: pipe => {
             pipe.on('request', () => {
                 pipe.respond({
@@ -84,7 +85,6 @@ t.test('default route', t => {
         }
     });
 
-    const app = createApp(router);
     const server = app.listen((err) => {
         t.error(err);
         server.unref();
@@ -99,13 +99,13 @@ t.test('default route', t => {
     });
 });
 
-function createApp(router) {
+function createApp(router, config) {
     return Trooba
         .use(httpServerTransport, {
             port: 0
         })
         // controller
-        .use(router)
+        .use(router, config)
         .build()
         .create('server:default');
 }
