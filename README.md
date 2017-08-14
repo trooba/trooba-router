@@ -19,6 +19,8 @@ $ npm install trooba-router -S
 
 ## Usage
 
+### Http server
+
 ```js
 const Trooba = require('trooba');
 const router = require('trooba-router');
@@ -48,37 +50,7 @@ Trooba
 })
 ```
 
-Or one can build routes first and then pass them to the main pipe
-
-```js
-const Trooba = require('trooba');
-const router = require('trooba-router');
-
-router.use('GET /path/to/resource', pipe => {
-    pipe.on('request', request => {
-        pipe.respond({
-            status: 200,
-            body: 'hello world'
-        });
-    })
-});
-router.use('GET /path/to/pipe', pipe => {
-    return Trooba.use('handler1')
-        .use('handler2')
-        .use(pipe => {
-            pipe.respond({
-                status: 200,
-                body: 'response from other pipe'
-            });
-        })
-        .build();
-})
-
-const pipe = Trooba
-.use('http')
-.use(router)
-.build();
-```
+### Routing service calls
 
 One can also use router in non-service pipelines, for example, in service invocation pipelines.
 This can make invocation of multiple services starting from the same point and is based on some context to match the route.
@@ -87,28 +59,72 @@ This can make invocation of multiple services starting from the same point and i
 const Trooba = require('trooba');
 const router = require('trooba-router');
 
-router.use('GET /path/to/external', pipe => {
-    pipe.on('request', request => {
-        pipe.respond({
-            status: 200,
-            body: 'hello world'
-        });
-    })
-});
-router.use('PUT /path/to/pipe', pipe => {
-    return Trooba.use('handler1')
-        .use('handler2')
-        .use(pipe => {
-            pipe.respond({
-                status: 200,
-                body: 'response from other pipe'
-            });
-        })
-        .build();
-})
-
 const pipe = Trooba
-.use('http')
-.use(router)
+.use(router, {
+    'OP1 /path/to/http': pipe => {
+        return Trooba
+            .use('handler1')
+            .use('handler2')
+            .use('http', {
+                hostname: 'rest.service'
+            })
+            .build();
+    },
+    'OP2 /path/to/soap': pipe => {
+        return Trooba
+            .use('handler1')
+            .use('handler2')
+            .use('soap', {
+                hostname: 'soap.service'
+            })
+            .build();
+    }
+})
 .build();
+```
+
+### Routing metadata
+
+As a pipeline grows some modules may need to know the target route before it reaches the router pipe point. For example, one would like to attach metadata to the specific route that acts as a route configuration that some middleware/handler may use during their execution.
+
+```js
+const Trooba = require('trooba');
+const router = require('trooba-router');
+
+Trooba
+.use('http')
+// will attach route information to pipe.context.route
+// and handler to pipe.context.route.$handler
+.use('trooba-router/match', {
+    'GET /path/to/resource': {
+        handler: pipe => {
+            pipe.on('request', request => {
+                pipe.respond({
+                    status: 200,
+                    body: 'hello world'
+                });
+            })
+        },
+        securityPolicy: 'authenticate',
+        validateRequest: true
+    },
+    'GET /path/to/pipe': {
+        handler: () => {
+            return Trooba.use('handler1')
+                .use('handler2')
+                .use(pipe => {
+                    pipe.respond({
+                        status: 200,
+                        body: 'response from other pipe'
+                    });
+                })
+                .build();
+        },
+        securityPolicy: 'none'
+    }
+})
+.use('security')
+.use('validation')
+// will execute route handler attached to pipe.context.route.$handler
+.use('trooba-router/execute');
 ```

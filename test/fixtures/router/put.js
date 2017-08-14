@@ -5,7 +5,7 @@ module.exports = pipe => {
         pipe.respond({
             status: 200,
             body: JSON.stringify({
-                hello: pipe.context.route.params.id
+                hello: pipe.context.$route.params.id
             })
         });
     });

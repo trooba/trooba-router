@@ -12,7 +12,7 @@ t.test('basic router with http server', t => {
 
     const app = createApp(router, {
         'GET /test': pipe => {
-            t.ok(pipe.context.route.params);
+            t.ok(pipe.context.$route.params);
             pipe.on('request', request => {
                 pipe.respond({
                     status: 200,
@@ -46,7 +46,7 @@ t.test('router with params with http server', t => {
 
     const app = createApp(router, {
         'GET /test/:id': pipe => {
-            t.is(pipe.context.route.params.id, 'hello');
+            t.is(pipe.context.$route.params.id, 'hello');
             pipe.respond({
                 status: 200,
                 body: JSON.stringify({

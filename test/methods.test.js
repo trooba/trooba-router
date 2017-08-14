@@ -53,7 +53,7 @@ t.test('parametric route', t => {
         }
     }, {
         'GET /test/:id': (pipe) => {
-            t.is(pipe.context.route.params.id, 'hello');
+            t.is(pipe.context.$route.params.id, 'hello');
         }
     });
 });
@@ -70,10 +70,10 @@ t.test('multiple parametric route', t => {
         store: store
     }, {
         'GET /test/:id': (pipe) => {
-            t.is(pipe.context.route.params.id, 'hello');
+            t.is(pipe.context.$route.params.id, 'hello');
         },
         'GET /other-test/:id': (pipe) => {
-            t.is(pipe.context.route.params.id, 'world');
+            t.is(pipe.context.$route.params.id, 'world');
         }
     });
 
@@ -91,10 +91,10 @@ t.test('multiple parametric route with the same prefix', t => {
 
     const config = {
         'GET /test/:id': (pipe) => {
-            t.is(pipe.context.route.params.id, 'hello');
+            t.is(pipe.context.$route.params.id, 'hello');
         },
         'GET /test/:id/world': (pipe) => {
-            t.is(pipe.context.route.params.id, 'world');
+            t.is(pipe.context.$route.params.id, 'world');
         }
     };
 
@@ -123,8 +123,8 @@ t.test('nested parametric route', t => {
         }
     }, {
         'GET /test/:hello/test/:world': (pipe) => {
-            t.is(pipe.context.route.params.hello, 'hello');
-            t.is(pipe.context.route.params.world, 'world');
+            t.is(pipe.context.$route.params.hello, 'hello');
+            t.is(pipe.context.$route.params.world, 'world');
         }
     });
 });
@@ -137,8 +137,8 @@ t.test('nested parametric route with same prefix', t => {
             t.ok('inside route');
         },
         'GET /test/:hello/test/:world': (pipe) => {
-            t.is(pipe.context.route.params.hello, 'hello');
-            t.is(pipe.context.route.params.world, 'world');
+            t.is(pipe.context.$route.params.hello, 'hello');
+            t.is(pipe.context.$route.params.world, 'world');
         }
     };
 
@@ -182,9 +182,9 @@ t.test('long parametric route', t => {
         }
     }, {
         'GET /abc/:def/ghi/:lmn/opq/:rst/uvz': (pipe) => {
-            t.is(pipe.context.route.params.def, 'def');
-            t.is(pipe.context.route.params.lmn, 'lmn');
-            t.is(pipe.context.route.params.rst, 'rst');
+            t.is(pipe.context.$route.params.def, 'def');
+            t.is(pipe.context.$route.params.lmn, 'lmn');
+            t.is(pipe.context.$route.params.rst, 'rst');
         }
     });
 });
@@ -200,21 +200,21 @@ t.test('long parametric route with common prefix', t => {
             throw new Error('I shoul not be here');
         },
         'GET /abc/:def': (pipe) => {
-            t.is(pipe.context.route.params.def, 'def');
+            t.is(pipe.context.$route.params.def, 'def');
         },
         'GET /abc/:def/ghi/:lmn': (pipe) => {
-            t.is(pipe.context.route.params.def, 'def');
-            t.is(pipe.context.route.params.lmn, 'lmn');
+            t.is(pipe.context.$route.params.def, 'def');
+            t.is(pipe.context.$route.params.lmn, 'lmn');
         },
         'GET /abc/:def/ghi/:lmn/opq/:rst': (pipe) => {
-            t.is(pipe.context.route.params.def, 'def');
-            t.is(pipe.context.route.params.lmn, 'lmn');
-            t.is(pipe.context.route.params.rst, 'rst');
+            t.is(pipe.context.$route.params.def, 'def');
+            t.is(pipe.context.$route.params.lmn, 'lmn');
+            t.is(pipe.context.$route.params.rst, 'rst');
         },
         'GET /abc/:def/ghi/:lmn/opq/:rst/uvz': (pipe) => {
-            t.is(pipe.context.route.params.def, 'def');
-            t.is(pipe.context.route.params.lmn, 'lmn');
-            t.is(pipe.context.route.params.rst, 'rst');
+            t.is(pipe.context.$route.params.def, 'def');
+            t.is(pipe.context.$route.params.lmn, 'lmn');
+            t.is(pipe.context.$route.params.rst, 'rst');
         }
     };
 
@@ -301,7 +301,7 @@ t.test('wildcard', t => {
         }
     }, {
         'GET /test/*': (pipe) => {
-            t.is(pipe.context.route.params['*'], 'hello');
+            t.is(pipe.context.$route.params['*'], 'hello');
         }
     });
 });
@@ -316,7 +316,7 @@ t.test('catch all wildcard', t => {
         }
     }, {
         'GET *': (pipe) => {
-            t.is(pipe.context.route.params['*'], '/test/hello');
+            t.is(pipe.context.$route.params['*'], '/test/hello');
         }
     });
 });

@@ -70,8 +70,8 @@ t.test('mixed nested route with matching regex', t => {
             t.fail('route not matched');
         },
         'GET /test/:id(^\\d+$)/hello/:world': (pipe) => {
-            t.is(pipe.context.route.params.id, '12');
-            t.is(pipe.context.route.params.world, 'world');
+            t.is(pipe.context.$route.params.id, '12');
+            t.is(pipe.context.$route.params.world, 'world');
         }
     });
 });
@@ -89,8 +89,8 @@ t.test('mixed nested route with double matching regex', t => {
             t.fail('route not matched');
         },
         'GET /test/:id(^\\d+$)/hello/:world(^\\d+$)': (pipe) => {
-            t.is(pipe.context.route.params.id, '12');
-            t.is(pipe.context.route.params.world, '15');
+            t.is(pipe.context.$route.params.id, '12');
+            t.is(pipe.context.$route.params.world, '15');
         }
     });
 });
