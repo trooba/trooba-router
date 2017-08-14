@@ -6,7 +6,7 @@
   "scripts": {
     "bench": "node bench.js",
     "test": "tap test/*.test.js --reporter classic",
-    "coverage": "tap test/*.test.js --cov --coverage-report=text-lcov | coveralls"
+    "coverage": "tap test/*.test.js --cov"
   },
   "repository": {
     "type": "git",
