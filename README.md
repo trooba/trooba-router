@@ -1,15 +1,20 @@
 # trooba-router
 
-The module provide generic router for [Trooba framework](https://trooba.github.io)
+[![codecov](https://codecov.io/gh/trooba/trooba-router/branch/master/graph/badge.svg)](https://codecov.io/gh/trooba/trooba-router)
+[![Build Status](https://travis-ci.org/trooba/trooba-router.svg?branch=master)](https://travis-ci.org/trooba/trooba-router) [![NPM](https://img.shields.io/npm/v/trooba-router.svg)](https://www.npmjs.com/package/trooba-router)
+[![Downloads](https://img.shields.io/npm/dm/trooba-router.svg)](http://npm-stat.com/charts.html?package=trooba-router)
+[![Known Vulnerabilities](https://snyk.io/test/github/trooba/trooba-router/badge.svg)](https://snyk.io/test/github/trooba/trooba-router)
 
-The router matching is based on the context information such as request method and URL path for http servers.
-Since this is a generic router we would like to make it flexible by allowing to inject different matchers.
-To provide basic functionality the module defines the following parameters
+The module provides a generic router for [Trooba framework](https://trooba.github.io)
 
-* operation (optional) defines operation, which in http would be set to one of http methods (GET, POST, PUT, etc.)
+It is mostly based on very fast [find-my-way router](https://www.npmjs.com/package/find-my-way) and adjusted to trooba pipeline API.
+
+The router matching is based on the pipeline context information.
+
+* operation (optional) defines operation, which in http case it would be set to one of http methods (GET, POST, PUT, etc.)
 * path (required) defines a specific route
 
-The above parameters should be set to pipe.context to make sure router works correctly.
+The above parameters are expected to be set by a transport to pipe.context to make sure router works correctly.
 
 ## Install
 
@@ -93,8 +98,8 @@ const router = require('trooba-router');
 
 Trooba
 .use('http')
-// will attach route information to pipe.context.route
-// and handler to pipe.context.route.$handler
+// will attach route information to pipe.context.$route
+// and handler to pipe.context.$route.handler
 .use('trooba-router/match', {
     'GET /path/to/resource': {
         handler: pipe => {
@@ -125,6 +130,6 @@ Trooba
 })
 .use('security')
 .use('validation')
-// will execute route handler attached to pipe.context.route.$handler
+// will execute route handler attached to pipe.context.$route.handler
 .use('trooba-router/execute');
 ```
