@@ -98,20 +98,18 @@ t.test('router should share storage', t => {
     const store = {};
 
     router({
-        store: store,
-        context: {}
+        store: store
     }, {
         'GET /test': pipe => {
             t.ok(pipe.context.$route.params);
         }
-    });
+    }).create();
 
     router({
-        store: store,
-        context: {
-            operation: 'GET',
-            path: '/test'
-        }
+        store: store
+    }).create({
+        operation: 'GET',
+        path: '/test'
     });
 });
 
@@ -142,7 +140,7 @@ t.test('router should match route and execute at the end of the pipe', t => {
                 pipe.respond({
                     status: 200,
                     body: JSON.stringify({
-                        hello: pipe.context.$route.params.id
+                        hello: request.id
                     })
                 });
             });
@@ -189,7 +187,7 @@ t.test('router should match route and execute at the end of the pipe, in-line ro
                 pipe.respond({
                     status: 200,
                     body: JSON.stringify({
-                        hello: pipe.context.$route.params.id
+                        hello: request.id
                     })
                 });
             });

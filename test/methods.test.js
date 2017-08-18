@@ -16,45 +16,39 @@ t.test('the router is an object with methods', t => {
 t.test('register a route', t => {
     t.plan(1);
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test'
-        }
-    }, {
+    router({}, {
         'GET /test': () => {
             t.ok('inside the handler');
         }
+    }).create({
+        operation: 'GET',
+        path: '/test'
     });
 });
 
 t.test('default route', t => {
     t.plan(1);
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test'
-        }
-    }, {
+    router({}, {
         defaultRoute: () => {
             t.ok('inside the default route');
         }
+    }).create({
+        operation: 'GET',
+        path: '/test'
     });
 });
 
 t.test('parametric route', t => {
     t.plan(1);
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test/hello'
-        }
-    }, {
+    router({}, {
         'GET /test/:id': (pipe) => {
             t.is(pipe.context.$route.params.id, 'hello');
         }
+    }).create({
+        operation: 'GET',
+        path: '/test/hello'
     });
 });
 
@@ -63,10 +57,6 @@ t.test('multiple parametric route', t => {
     const store = {};
 
     router({
-        context: {
-            operation: 'GET',
-            path: '/test/hello'
-        },
         store: store
     }, {
         'GET /test/:id': (pipe) => {
@@ -75,14 +65,16 @@ t.test('multiple parametric route', t => {
         'GET /other-test/:id': (pipe) => {
             t.is(pipe.context.$route.params.id, 'world');
         }
+    }).create({
+        operation: 'GET',
+        path: '/test/hello'
     });
 
     router({
-        context: {
-            operation: 'GET',
-            path: '/other-test/world'
-        },
         store: store
+    }).create({
+        operation: 'GET',
+        path: '/other-test/world'
     });
 });
 
@@ -98,34 +90,28 @@ t.test('multiple parametric route with the same prefix', t => {
         }
     };
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test/hello'
-        }
-    }, config);
+    router({}, config).create({
+        operation: 'GET',
+        path: '/test/hello'
+    });
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test/world/world'
-        }
-    }, config);
+    router({}, config).create({
+        operation: 'GET',
+        path: '/test/world/world'
+    });
 });
 
 t.test('nested parametric route', t => {
     t.plan(2);
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test/hello/test/world'
-        }
-    }, {
+    router({}, {
         'GET /test/:hello/test/:world': (pipe) => {
             t.is(pipe.context.$route.params.hello, 'hello');
             t.is(pipe.context.$route.params.world, 'world');
         }
+    }).create({
+        operation: 'GET',
+        path: '/test/hello/test/world'
     });
 });
 
@@ -142,50 +128,42 @@ t.test('nested parametric route with same prefix', t => {
         }
     };
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test'
-        }
-    }, config);
+    router({}, config).create({
+        operation: 'GET',
+        path: '/test'
+    });
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test/hello/test/world'
-        }
-    }, config);
+    router({}, config).create({
+        operation: 'GET',
+        path: '/test/hello/test/world'
+    });
 });
 
 t.test('long route', t => {
     t.plan(1);
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/abc/def/ghi/lmn/opq/rst/uvz'
-        }
-    }, {
+    router({}, {
         'GET /abc/def/ghi/lmn/opq/rst/uvz': (pipe) => {
             t.ok('inside long path');
         }
+    }).create({
+        operation: 'GET',
+        path: '/abc/def/ghi/lmn/opq/rst/uvz'
     });
 });
 
 t.test('long parametric route', t => {
     t.plan(3);
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/abc/def/ghi/lmn/opq/rst/uvz'
-        }
-    }, {
+    router({}, {
         'GET /abc/:def/ghi/:lmn/opq/:rst/uvz': (pipe) => {
             t.is(pipe.context.$route.params.def, 'def');
             t.is(pipe.context.$route.params.lmn, 'lmn');
             t.is(pipe.context.$route.params.rst, 'rst');
         }
+    }).create({
+        operation: 'GET',
+        path: '/abc/def/ghi/lmn/opq/rst/uvz'
     });
 });
 
@@ -218,33 +196,25 @@ t.test('long parametric route with common prefix', t => {
         }
     };
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/abc/def'
-        }
-    }, config);
+    router({}, config).create({
+        operation: 'GET',
+        path: '/abc/def'
+    });
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/abc/def/ghi/lmn'
-        }
-    }, config);
+    router({}, config).create({
+        operation: 'GET',
+        path: '/abc/def/ghi/lmn'
+    });
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/abc/def/ghi/lmn/opq/rst'
-        }
-    }, config);
+    router({}, config).create({
+        operation: 'GET',
+        path: '/abc/def/ghi/lmn/opq/rst'
+    });
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/abc/def/ghi/lmn/opq/rst/uvz'
-        }
-    }, config);
+    router({}, config).create({
+        operation: 'GET',
+        path: '/abc/def/ghi/lmn/opq/rst/uvz'
+    });
 });
 
 t.test('common prefix', t => {
@@ -265,59 +235,47 @@ t.test('common prefix', t => {
         }
     };
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/f'
-        }
-    }, config);
-    router({
-        context: {
-            operation: 'GET',
-            path: '/ff'
-        }
-    }, config);
-    router({
-        context: {
-            operation: 'GET',
-            path: '/ffa'
-        }
-    }, config);
-    router({
-        context: {
-            operation: 'GET',
-            path: '/ffb'
-        }
-    }, config);
+    router({}, config).create({
+        operation: 'GET',
+        path: '/f'
+    });
+    router({}, config).create({
+        operation: 'GET',
+        path: '/ff'
+    });
+    router({}, config).create({
+        operation: 'GET',
+        path: '/ffa'
+    });
+    router({}, config).create({
+        operation: 'GET',
+        path: '/ffb'
+    });
 });
 
 t.test('wildcard', t => {
     t.plan(1);
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test/hello'
-        }
-    }, {
+    router({}, {
         'GET /test/*': (pipe) => {
             t.is(pipe.context.$route.params['*'], 'hello');
         }
+    }).create({
+        operation: 'GET',
+        path: '/test/hello'
     });
 });
 
 t.test('catch all wildcard', t => {
     t.plan(1);
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test/hello'
-        }
-    }, {
+    router({}, {
         'GET *': (pipe) => {
             t.is(pipe.context.$route.params['*'], '/test/hello');
         }
+    }).create({
+        operation: 'GET',
+        path: '/test/hello'
     });
 });
 
@@ -439,36 +397,32 @@ t.test('safe decodeURIComponent - wildcard', t => {
 t.test('static routes should be inserted before parametric / 1', t => {
     t.plan(1);
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test/hello'
-        }
-    }, {
+    router({}, {
         'GET /test/hello': () => {
             t.pass('inside correct handler');
         },
         'GET /test/:id': () => {
             t.fail('wrong handler');
         }
+    }).create({
+        operation: 'GET',
+        path: '/test/hello'
     });
 });
 
 t.test('static routes should be inserted before parametric / 2', t => {
     t.plan(1);
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test/hello'
-        }
-    }, {
+    router({}, {
         'GET /test/:id': () => {
             t.fail('wrong handler');
         },
         'GET /test/hello': () => {
             t.pass('inside correct handler');
         }
+    }).create({
+        operation: 'GET',
+        path: '/test/hello'
     });
 });
 
@@ -490,19 +444,15 @@ t.test('static routes should be inserted before parametric / 3', t => {
         }
     };
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test'
-        }
-    }, config);
+    router({}, config).create({
+        operation: 'GET',
+        path: '/test'
+    });
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test/hello'
-        }
-    }, config);
+    router({}, config).create({
+        operation: 'GET',
+        path: '/test/hello'
+    });
 });
 
 t.test('static routes should be inserted before parametric / 4', t => {
@@ -523,17 +473,13 @@ t.test('static routes should be inserted before parametric / 4', t => {
         }
     };
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/test/id'
-        }
-    }, config);
+    router({}, config).create({
+        operation: 'GET',
+        path: '/test/id'
+    });
 
-    router({
-        context: {
-            operation: 'GET',
-            path: '/id'
-        }
-    }, config);
+    router({}, config).create({
+        operation: 'GET',
+        path: '/id'
+    });
 });
