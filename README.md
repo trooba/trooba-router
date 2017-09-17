@@ -1,5 +1,7 @@
 # trooba-router
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/trooba/trooba-router.svg)](https://greenkeeper.io/)
+
 [![codecov](https://codecov.io/gh/trooba/trooba-router/branch/master/graph/badge.svg)](https://codecov.io/gh/trooba/trooba-router)
 [![Build Status](https://travis-ci.org/trooba/trooba-router.svg?branch=master)](https://travis-ci.org/trooba/trooba-router) [![NPM](https://img.shields.io/npm/v/trooba-router.svg)](https://www.npmjs.com/package/trooba-router)
 [![Downloads](https://img.shields.io/npm/dm/trooba-router.svg)](http://npm-stat.com/charts.html?package=trooba-router)
