@@ -9,7 +9,7 @@ The module provides a generic router for [Trooba framework](https://trooba.githu
 
 It is mostly based on very fast [find-my-way router](https://www.npmjs.com/package/find-my-way) and adjusted to trooba pipeline API.
 
-The router matching is based on the pipeline context information.
+The router matching is based on the pipeline context information:
 
 * operation (optional) defines operation, which in http case it would be set to one of http methods (GET, POST, PUT, etc.)
 * path (required) defines a specific route
